@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TiCTacToe</title>
+	<style>
+		#board {
+			width: 350px;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: repeat(3, 100px);
+			cursor: pointer;
+			grid-gap: 2px;
+			
+		}
+		.box{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border: solid 1px black;
+			font-size: 2rem;
+
+		}
+		.box:hover{
+			background: #f5f5f5;
+		}
+	</style>
+</head>
+<body>
+	<div id="board">
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	<div class="box" ></div>
+	</div>
+
+	<script>
+		
+	class TiCTacToe{
+		constructor(){
+			this.boxes = document.querySelectorAll('.box');
+			this.symbol = '';
+			this.winCombination = [
+				[0,1,2],
+				[3,4,5],
+				[6,7,8],
+				[0,3,6],
+				[1,4,7],
+				[2,5,8],
+				[0,4,8],
+				[2,4,6],			
+			];
+
+			this.startGame();
+		}
+		startGame(){
+			for(let box of this.boxes){
+				box.addEventListener('click', (e) => {
+					if(e.target.textContent){
+						return;
+					}
+					if(this.symbol === '' || this.symbol === "x"){
+						this.symbol = 'o';
+					}
+					else if(this.symbol === "o"){
+						this.symbol = 'x';
+					}
+					e.target.textContent = this.symbol;
+
+					for(let win of this.winCombination){	
+						console.log(win)
+						console.log(this.boxes[0])
+						const content1 = this.boxes[win[0]].textContent;
+						const content2 = this.boxes[win[1]].textContent;
+						const content3 = this.boxes[win[2]].textContent;
+						
+						if(content1 == '' || content2 == '' || content3 == '' ){
+							continue;
+						}
+						if(content1 === content2 && content1 === content3){
+							setTimeout(()=> {
+								if(confirm('You win. Play again?')){
+									for(let div of this.boxes){
+										div.textContent = '';
+									}
+									return this.startGame();
+								}
+							},10)
+						}
+					}
+					let checkEmpty = [...this.boxes];
+					checkEmpty = checkEmpty.every(function(item){
+						return item.textContent != '';
+					});
+
+					if(checkEmpty == true){
+						setTimeout(()=> {
+							if(confirm('Draw!  Play again?')){
+								for(let div of this.boxes){
+									div.textContent = '';
+								}
+								return this.startGame();
+							}
+						},10)
+					}
+				})
+			}
+		}
+	}
+	const ui = new TiCTacToe();
+	</script>
+</body>
+</html>
